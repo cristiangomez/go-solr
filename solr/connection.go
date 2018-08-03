@@ -92,11 +92,16 @@ func makeRequest(client *http.Client, req *http.Request) ([]byte, error) {
 	return body, nil
 }
 
-func AddTLSCertFromPem(pem []byte, isv bool) {
+func AddTLSCertFromPem(pem []byte) {
 	cert := x509.NewCertPool()
 	cert.AppendCertsFromPEM(pem)
 	transport.TLSClientConfig = &tls.Config{
 		RootCAs: cert,
+	}
+}
+
+func InsecureSkipVerifyTLSClient(isv bool){
+	transport.TLSClientConfig = &tls.Config{
 		InsecureSkipVerify: isv,
 	}
 }
