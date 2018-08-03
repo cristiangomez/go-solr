@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"crypto/tls"
+	"crypto/x509"
 )
 
 var userAgent = fmt.Sprintf("Go-solr/%s (+https://github.com/cristiangomez/go-solr)", VERSION)
@@ -90,8 +92,13 @@ func makeRequest(client *http.Client, req *http.Request) ([]byte, error) {
 	return body, nil
 }
 
-func ReplaceTransport(t http.Transport) {
-	transport = t
+func AddTLSCertFromPem(pem []byte, isv bool) {
+	cert := x509.NewCertPool()
+	cert.AppendCertsFromPEM(pem)
+	transport.TLSClientConfig = &tls.Config{
+		RootCAs: cert,
+		InsecureSkipVerify: isv,
+	}
 }
 
 func json2bytes(data interface{}) (*[]byte, error) {
