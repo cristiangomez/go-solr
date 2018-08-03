@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-var userAgent = fmt.Sprintf("Go-solr/%s (+https://github.com/vanng822/go-solr)", VERSION)
+var userAgent = fmt.Sprintf("Go-solr/%s (+https://github.com/cristiangomez/go-solr)", VERSION)
 
 var transport = http.Transport{}
 
@@ -88,6 +88,10 @@ func makeRequest(client *http.Client, req *http.Request) ([]byte, error) {
 	}
 
 	return body, nil
+}
+
+func ReplaceTransport(t http.Transport) {
+	transport = t
 }
 
 func json2bytes(data interface{}) (*[]byte, error) {
